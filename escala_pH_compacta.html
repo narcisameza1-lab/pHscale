@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escala pH - Versión Compacta</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+        }
+
+        .ph-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .ph-scale {
+            display: flex;
+            height: 60px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+
+        .ph-segment {
+            flex: 1;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .ph-segment:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            filter: brightness(1.2);
+        }
+
+        .ph-segment.active {
+            transform: scale(1.15);
+            z-index: 20;
+            filter: brightness(1.3);
+        }
+
+        .ph-0 { background: #991b1b; }
+        .ph-1 { background: #dc2626; }
+        .ph-2 { background: #ef4444; }
+        .ph-3 { background: #f97316; }
+        .ph-4 { background: #f59e0b; }
+        .ph-5 { background: #facc15; }
+        .ph-6 { background: #fde047; color: #333; text-shadow: none; }
+        .ph-7 { background: #4ade80; color: #333; text-shadow: none; }
+        .ph-8 { background: #34d399; }
+        .ph-9 { background: #2dd4bf; }
+        .ph-10 { background: #22d3ee; }
+        .ph-11 { background: #38bdf8; }
+        .ph-12 { background: #60a5fa; }
+        .ph-13 { background: #8b5cf6; }
+        .ph-14 { background: #a855f7; }
+
+        .labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .label-section {
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .label-acido { background: #ef4444; }
+        .label-neutro { background: #4ade80; }
+        .label-base { background: #8b5cf6; }
+
+        .info-box {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            background: white;
+            border: 2px solid #0ea5e9;
+            min-height: 120px;
+            box-shadow: 0 5px 15px rgba(14, 165, 233, 0.15);
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-ph-value {
+            font-size: 2em;
+            font-weight: bold;
+            padding: 5px 20px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .info-title {
+            font-size: 1.3em;
+            color: #0c4a6e;
+            font-weight: bold;
+        }
+
+        .info-content {
+            font-size: 1em;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .ejemplos-inline {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #0369a1;
+        }
+
+        .instruction {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <div class="ph-container">
+        <p class="instruction">👆 Haz clic en cualquier número para ver información</p>
+        
+        <div class="ph-scale" id="phScale"></div>
+        
+        <div class="labels">
+            <div class="label-section label-acido">ÁCIDO (0-6)</div>
+            <div class="label-section label-neutro">NEUTRO (7)</div>
+            <div class="label-section label-base">BASE (8-14)</div>
+        </div>
+
+        <div class="info-box" id="infoBox">
+            <p style="text-align: center; color: #94a3b8;">Selecciona un valor de pH</p>
+        </div>
+    </div>
+
+    <script>
+        const phDataCompact = {
+            0: { tipo: "ÁCIDO MUY FUERTE", color: "#991b1b", desc: "Extremadamente corrosivo y peligroso.", ejemplos: "Ácido de batería", planta: "🚨 ALERTA - Neutralización inmediata" },
+            1: { tipo: "ÁCIDO MUY FUERTE", color: "#dc2626", desc: "Altamente corrosivo.", ejemplos: "Ácido clorhídrico, jugos gástricos", planta: "⚠️ Peligroso - Verificar sistemas" },
+            2: { tipo: "ÁCIDO FUERTE", color: "#ef4444", desc: "Muy ácido.", ejemplos: "Jugo de limón, vinagre", planta: "Fuera de rango - Tratamiento químico" },
+            3: { tipo: "ÁCIDO MODERADO", color: "#f97316", desc: "Ácido pero no peligroso.", ejemplos: "Manzanas, refrescos, jugo de naranja", planta: "Bajo del óptimo - Monitorear" },
+            4: { tipo: "ÁCIDO DÉBIL", color: "#f59e0b", desc: "Ligeramente ácido.", ejemplos: "Cerveza, café, tomate", planta: "Acercándose al rango aceptable" },
+            5: { tipo: "ÁCIDO MUY DÉBIL", color: "#facc15", desc: "Casi neutro.", ejemplos: "Pan, té negro", planta: "Límite inferior - Aceptable" },
+            6: { tipo: "LIGERAMENTE ÁCIDO", color: "#fde047", desc: "Prácticamente neutro.", ejemplos: "Leche, agua de lluvia limpia", planta: "✓ RANGO ACEPTABLE" },
+            7: { tipo: "NEUTRO", color: "#4ade80", desc: "Balance perfecto.", ejemplos: "Agua pura, sangre humana", planta: "✓✓ ÓPTIMO - Equilibrio perfecto" },
+            8: { tipo: "LIGERAMENTE BÁSICO", color: "#34d399", desc: "Ligeramente alcalino.", ejemplos: "Agua de mar, clara de huevo", planta: "✓ RANGO ACEPTABLE" },
+            9: { tipo: "BASE DÉBIL", color: "#2dd4bf", desc: "Básico pero no peligroso.", ejemplos: "Jabón, pasta dental", planta: "Elevado - Monitorear corrosión" },
+            10: { tipo: "BASE MODERADA", color: "#22d3ee", desc: "Alcalino.", ejemplos: "Detergente, leche de magnesia", planta: "Fuera de rango - Ajustar con ácidos" },
+            11: { tipo: "BASE FUERTE", color: "#38bdf8", desc: "Muy alcalino.", ejemplos: "Amoníaco, limpiadores fuertes", planta: "⚠️ Alto - Verificar dosificación" },
+            12: { tipo: "BASE MUY FUERTE", color: "#60a5fa", desc: "Altamente cáustico.", ejemplos: "Soda cáustica diluida", planta: "⚠️⚠️ Peligroso - Neutralizar" },
+            13: { tipo: "BASE MUY FUERTE", color: "#8b5cf6", desc: "Extremadamente cáustico.", ejemplos: "Soda cáustica (NaOH), lejía", planta: "🚨 CRÍTICO - Neutralización inmediata" },
+            14: { tipo: "BASE EXTREMA", color: "#a855f7", desc: "Máximo nivel alcalino.", ejemplos: "Hidróxido de sodio puro", planta: "🚨🚨 EMERGENCIA - Evacuación urgente" }
+        };
+
+        const phScale = document.getElementById('phScale');
+        for (let i = 0; i <= 14; i++) {
+            const segment = document.createElement('div');
+            segment.className = `ph-segment ph-${i}`;
+            segment.textContent = i;
+            segment.addEventListener('click', () => showInfo(i));
+            phScale.appendChild(segment);
+        }
+
+        function showInfo(ph) {
+            const data = phDataCompact[ph];
+            const infoBox = document.getElementById('infoBox');
+            
+            document.querySelectorAll('.ph-segment').forEach(seg => seg.classList.remove('active'));
+            document.querySelector(`.ph-${ph}`).classList.add('active');
+            
+            infoBox.innerHTML = `
+                <div class="info-header">
+                    <div class="info-ph-value" style="background: ${data.color};">pH ${ph}</div>
+                    <div class="info-title">${data.tipo}</div>
+                </div>
+                <div class="info-content">
+                    <p><strong>${data.desc}</strong></p>
+                    <p class="ejemplos-inline">📋 Ejemplos: ${data.ejemplos}</p>
+                    <p><strong>🏭 En la planta:</strong> ${data.planta}</p>
+                </div>
+            `;
+        }
+
+        window.addEventListener('load', () => showInfo(7));
+    </script>
+</body>
+</html>
