@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escala de pH Interactiva - Detective de pH</title>
+    <title>Escala de pH Interactiva - UPR Carolina</title>
     <style>
         * {
             margin: 0;
@@ -22,13 +22,32 @@
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-top {
+            margin-bottom: 20px;
+        }
+
+        .logo-top img {
+            height: 100px;
+            max-width: 300px;
+            object-fit: contain;
+        }
+
+        .logo {
+            font-size: 4em;
+            margin-bottom: 20px;
         }
 
         h1 {
-            text-align: center;
             color: #1E3A8A;
             font-size: 2.5em;
             margin-bottom: 10px;
@@ -36,10 +55,15 @@
         }
 
         .subtitle {
-            text-align: center;
             color: #64748b;
             font-size: 1.2em;
-            margin-bottom: 40px;
+            margin-bottom: 10px;
+        }
+
+        .institution {
+            color: #94a3b8;
+            font-size: 1em;
+            margin-top: 15px;
         }
 
         .ph-scale-container {
@@ -164,6 +188,8 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .info-title {
@@ -241,12 +267,106 @@
             background: #f1f5f9;
             border-radius: 10px;
         }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 3px solid #e2e8f0;
+        }
+
+        .footer-title {
+            font-size: 1.2em;
+            color: #475569;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .footer-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-logos img {
+            height: 70px;
+            max-width: 200px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .footer-logos img:hover {
+            transform: scale(1.05);
+        }
+
+        .footer-text {
+            color: #64748b;
+            font-size: 0.95em;
+            line-height: 1.8;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .footer-text strong {
+            color: #334155;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .logo-top img {
+                height: 70px;
+            }
+
+            .ph-scale {
+                height: 60px;
+            }
+
+            .ph-segment {
+                font-size: 1.3em;
+            }
+
+            .info-title {
+                font-size: 1.5em;
+            }
+
+            .info-ph-value {
+                font-size: 2em;
+                padding: 8px 20px;
+            }
+
+            .footer-logos {
+                gap: 30px;
+            }
+
+            .footer-logos img {
+                height: 50px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🧪 Escala de pH Interactiva</h1>
-        <p class="subtitle">Detective de pH: Misterio en la Planta</p>
+        <!-- LOGO UPR CAROLINA ARRIBA -->
+        <div class="logo-top">
+            <img src="logo_upr_carolina.png" alt="Universidad de Puerto Rico - Carolina">
+        </div>
+
+        <div class="header">
+            <div class="logo">🧪</div>
+            <h1>Escala de pH Interactiva</h1>
+            <p class="subtitle">Detective de pH: Misterio en la Planta</p>
+            <p class="institution">Universidad de Puerto Rico - Carolina</p>
+        </div>
 
         <p class="instruction">
             👆 <strong>Haz clic en cualquier número</strong> para descubrir información sobre ese nivel de pH
@@ -269,6 +389,21 @@
                 <div class="placeholder-icon">🔍</div>
                 <p>Selecciona un valor de pH en la escala para ver información detallada</p>
             </div>
+        </div>
+
+        <!-- FOOTER CON AMBOS LOGOS -->
+        <div class="footer">
+            <div class="footer-title">Desarrollado con el apoyo de:</div>
+            <div class="footer-logos">
+                <img src="logo_upr_carolina.png" alt="Universidad de Puerto Rico - Carolina">
+                <img src="logo_nsf.png" alt="National Science Foundation">
+            </div>
+            <p class="footer-text">
+                <strong>Universidad de Puerto Rico - Carolina</strong><br>
+                Departamento de Tecnologías en Ingeniería<br>
+                Con el apoyo de la <strong>National Science Foundation (NSF)</strong><br>
+                © 2024-2025
+            </p>
         </div>
     </div>
 
